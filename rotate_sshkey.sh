@@ -4,8 +4,11 @@
 # SETUP #
 #########
 # Install all utilities required
-echo "Installing JQ"
-sudo apt-get install jq -y
+# Check if jq is installed using dpkg
+if ! dpkg -l | grep -q "jq"; then
+    echo "Installing JQ"
+    sudo apt-get install jq -y
+fi
 
 # Check if 'bws' (Bitwarden CLI Filename) is in the same directory
 if [ ! -f ./bws ]; then
@@ -71,6 +74,7 @@ if [ -n "$SSH_PRIVATE_KEY" ]; then
     chmod 600 "$OLD_KEY_FILE" 
 else
     echo "Key '$INPUT_KEY' not found in Bitwarden secrets."
+    exit 1
 fi
 
 # Get the Secret ID
@@ -84,6 +88,7 @@ if [ -n "$NOTE" ]; then
     PUBLICDNS=$(echo "$NOTE" | sed -n 's/.*publicdns:\([^ ]*\).*/\1/p')
 else
     echo "Note for Key '$INPUT_KEY' is not configured correctly."
+    exit 1
 fi
 
 
