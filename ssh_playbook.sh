@@ -58,9 +58,27 @@ unset TOKEN
 SECRETS_JSON=$(./bws secret list --access-token "$BITWARDEN_CLI_TOKEN")
 
 # List all Systems with SSH Keys for the user to pick
-echo -e "\nWhich System to SSH Into?\n"
-echo "$SECRETS_JSON" | jq -r --arg input_key "$INPUT_KEY" '.[] | .key'
-read -p "Enter System Name: " INPUT_KEY
+# Parse the JSON data and extract the system names into an array
+options=($(echo "$SECRETS_JSON" | jq -r '.[] | .key'))
+
+# Create an array of menu items
+menu_items=()
+for option in "${options[@]}"; do
+    menu_items+=("$option" "")
+done
+
+# Use whiptail to create a menu for selecting the system
+choice=$(whiptail --title "Select a System to SSH Into" --menu "Choose a system:" 15 50 5 "${menu_items[@]}" 3>&1 1>&2 2>&3)
+
+# Check the exit status to see if the user pressed Cancel
+if [ $? -eq 0 ]; then
+    INPUT_KEY="$choice"
+    echo "Selected System Name: $INPUT_KEY"
+    # Now you can use $INPUT_KEY for further processing, like SSHing into the selected system
+else
+    echo "You canceled."
+    exit 1
+fi
 
 # Use jq to parse the JSON and extract the value associated with the input key
 UNTRIMMED_SSH_PRIVATE_KEY=$(echo "$SECRETS_JSON" | jq -r --arg input_key "$INPUT_KEY" '.[] | select(.key == $input_key) | .value')
