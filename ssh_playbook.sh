@@ -1,4 +1,18 @@
 #!/bin/bash
+# Script Version: 1.0
+
+# Automatically update the script if there is a new version
+remote_version=$(curl -s https://raw.githubusercontent.com/JamesHillyard/SSH-Key-Management/main/ssh_playbook.sh | grep -o 'Script Version: [0-9]\+\(\.[0-9]\+\)*')
+local_version=$(grep -o 'Script Version: [0-9]\+\(\.[0-9]\+\)*' "$0")
+if [ "$remote_version" != "$local_version" ]; then
+    echo "Updating script..."
+    curl -s -o "$0" https://raw.githubusercontent.com/JamesHillyard/SSH-Key-Management/main/ssh_playbook.sh
+    chmod +x "$0"
+    echo "Script updated to version $remote_version"
+    exec "$(cd "$(dirname "$0")" && pwd -P)/$(basename "$0")" "$@"
+else
+    echo "Script is up to date."
+fi
 
 #########
 # SETUP #
