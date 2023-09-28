@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script Version: 1.0
+# Script Version: 1.1
 
 # Function to update the script
 update_script() {
@@ -124,7 +124,7 @@ select_system_and_key() {
 # Function to generate a new SSH key pair and upload to target instance
 generate_and_upload_new_keypair() {
     NEW_KEY_FILE="$INPUT_KEY-New"
-    ssh-keygen -t ecdsa -b 521 -f "$NEW_KEY_FILE"
+    ssh-keygen -t ecdsa -b 521 -f "$NEW_KEY_FILE" -N ''
 
     # Upload the new public key to your EC2 instance
     cat "$NEW_KEY_FILE.pub" | ssh -i "$OLD_KEY_FILE" "$USER@$PUBLICDNS" 'cat > ~/.ssh/authorized_keys'
