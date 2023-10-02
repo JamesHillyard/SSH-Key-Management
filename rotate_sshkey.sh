@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script Version: 1.1
+# Script Version: 1.2
 
 # Function to update the script
 update_script() {
@@ -109,16 +109,6 @@ select_system_and_key() {
 
     SECRET_ID=$(echo "$SECRETS_JSON" | jq -r --arg input_key "$INPUT_KEY" '.[] | select(.key == $input_key) | .id')
 
-    # # Get note section from the secret
-    # NOTE=$(echo "$SECRETS_JSON" | jq -r --arg input_key "$INPUT_KEY" '.[] | select(.key == $input_key) | .note')
-    # # Check is note is correctly formatted
-    # if [ -n "$NOTE" ]; then
-    #     USER=$(echo "$NOTE" | sed -n 's/.*user:\([^ ]*\).*/\1/p')
-    #     PUBLICDNS=$(echo "$NOTE" | sed -n 's/.*publicdns:\([^ ]*\).*/\1/p')
-    # else
-    #     echo "Note for Key '$INPUT_KEY' is not configured correctly."
-    #     exit 1
-    # fi
 }
 
 # Function to generate a new SSH key pair and upload to target instance
