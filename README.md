@@ -22,4 +22,10 @@ To use the SSH Playbook, simply execute the script with `bash ssh_playbook.sh`. 
 When you're finished, run 'exit' from the terminal, this will then run the cleanup of the script. If you forget to do this, it's not a problem, the private key will be left in the directory you ran the script from. When you next use the script it will clean it up. This is not ideal, but equivalent to keeping keys in your '.ssh' folder.
 
 ## Using Key Rotation
-*Feature coming soon*
+To run the SSH Key rotation script, run bash rotate_sshkey.sh in the directory you installed it to.
+
+You will be prompted for a master password, you set this up when you first installed the SSH Playbook or SSH Key Rotation Script.
+
+You will then be taken to a purple screen with all the accessible systems listed. Use the arrow keys to navigate to the system you want to rotate the SSH Key of and press enter. 
+
+It will take a few seconds and you should see an SSH key is created, it’s then automatically uploaded to bitwarden. The SSH Key has been rotated, and you will be able to access the system with the SSH playbook without anything further from you.
